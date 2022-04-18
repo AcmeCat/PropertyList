@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.recyclerview.widget.RecyclerView
+import java.text.NumberFormat
 
 class PropertyAdapter (var properties: List<Property>): RecyclerView.Adapter<PropertyAdapter.ViewHolder> () {
 
@@ -46,12 +47,18 @@ class PropertyAdapter (var properties: List<Property>): RecyclerView.Adapter<Pro
             val priceView: TextView = view.findViewById(R.id.price)
 
             addressView.text = property.address
-            priceView.text = property.price.toString()
+            priceView.text = formatPrice(property.price)
         }
 
         override fun onClick(v: View) {
-            Log.d("PropertyAdapter", property.address + " selected")
+            Log.d("PropertyAdapter", property.address + " selected") //<-remove this
             propertyDetailsViewModel.selectedProperty.value = property
+        }
+
+        fun formatPrice(price: Int) : String {
+            val moneyFormatter = NumberFormat.getCurrencyInstance()
+            moneyFormatter.maximumFractionDigits = 0
+            return moneyFormatter.format(price)
         }
 
     }
