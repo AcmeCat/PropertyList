@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -46,6 +47,16 @@ class PropertyDetailsFragment : Fragment () {
         )
         propertyImage?.setImageResource(resourceId)
 
+        val doneButton = view?.findViewById<Button>(R.id.done)
+
+        doneButton?.setOnClickListener {_ ->
+            property.address = addressText?.text.toString()
+            property.price = formatPrice(priceText?.text.toString())
+            property.agent = agentText?.text.toString()
+
+            propertyDetailsViewModel.editedProperty.value = property
+        }
+
         return view
     }
 
@@ -54,5 +65,11 @@ class PropertyDetailsFragment : Fragment () {
         val moneyFormatter = NumberFormat.getCurrencyInstance()
         moneyFormatter.maximumFractionDigits = 0
         return moneyFormatter.format(price)
+    }
+
+    fun formatPrice(price: String) : Int {
+        val moneyFormatter = NumberFormat.getCurrencyInstance()
+        moneyFormatter.maximumFractionDigits = 0
+        return moneyFormatter.parse(price).toInt()
     }
 }

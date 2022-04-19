@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -14,7 +16,8 @@ class PropertyListFragment : Fragment() {
         fun newInstance () = PropertyListFragment ()
     }
 
-    val propertyArray: ArrayList<Property> = ArrayList ()
+    private var propertyArray: ArrayList<Property> = ArrayList ()
+    private lateinit var propertyDetailsViewModel: PropertyDetailsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,6 +28,9 @@ class PropertyListFragment : Fragment() {
         propertyArray.add(Property("4", "house4", "13 Eastbourne Parade, Sunset Beach, 6530", 285000, "Pip Allen"))
         propertyArray.add(Property("5", "house5", "58 Thomas Street, West Perth, 6005", 585000, "Carl Phathead"))
         propertyArray.add(Property("6", "house6", "1/34 Thomas Street, West Perth, 6005", 760000, "Don Wan Sills"))
+
+        val context = activity as ViewModelStoreOwner
+        propertyDetailsViewModel = ViewModelProvider(context).get(PropertyDetailsViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -35,6 +41,18 @@ class PropertyListFragment : Fragment() {
 
         val recyclerView = inflater.inflate(R.layout.fragment_list, container, false) as RecyclerView
         recyclerView.layoutManager = LinearLayoutManager(context)
+
+        var editedProperty = propertyDetailsViewModel.editedProperty.value
+
+        if (editedProperty != null) {
+            for (i in 0 until (propertyArray.size-1)){
+                if (propertyArray[i].id ==editedProperty.id){
+                    propertyArray[i] = editedProperty
+                    break
+                }
+            }
+        }
+
         recyclerView.adapter = PropertyAdapter(propertyArray)
         return recyclerView
     }

@@ -2,6 +2,7 @@ package com.illtech.propertylist
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 
 class MainActivity : AppCompatActivity() {
@@ -15,15 +16,19 @@ class MainActivity : AppCompatActivity() {
         propertyDetailsViewModel = ViewModelProvider(this).get(PropertyDetailsViewModel::class.java)
 
         propertyDetailsViewModel.selectedProperty.observe(this) {
-            supportFragmentManager.beginTransaction().replace(R.id.container, PropertyDetailsFragment.newInstance()).commit()
+            loadFragment(PropertyDetailsFragment.newInstance())
+        }
+
+        propertyDetailsViewModel.editedProperty.observe(this) {
+            loadFragment(PropertyListFragment.newInstance())
         }
 
         if (savedInstanceState == null){
-
-            //refer to PropertyListFragment class
-            val fragment = PropertyListFragment.newInstance()
-
-            supportFragmentManager.beginTransaction().replace(R.id.container, fragment).commit()
+            loadFragment(PropertyListFragment.newInstance())
         }
+    }
+
+    fun loadFragment (fragment: Fragment) {
+        supportFragmentManager.beginTransaction().replace(R.id.container, fragment).commit()
     }
 }
