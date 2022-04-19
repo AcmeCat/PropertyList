@@ -36,7 +36,8 @@ class MainActivity : AppCompatActivity() {
         val currentFragment: Fragment? = supportFragmentManager.findFragmentById(R.id.container)
 
         if (currentFragment != null && currentFragment.view?.id == R.id.property_details_fragment) {
-            loadFragment(PropertyListFragment.newInstance())
+            val detailsFragment = currentFragment as PropertyDetailsFragment
+            detailsFragment.checkIfDone(true)
         } else {
             finish()
         }
