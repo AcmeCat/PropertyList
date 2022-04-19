@@ -9,16 +9,19 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-
+//list fragment controller class
 class PropertyListFragment : Fragment() {
 
+    //works like java static method
     companion object {
         fun newInstance () = PropertyListFragment ()
     }
 
+    //class variables
     private var propertyArray: ArrayList<Property> = ArrayList ()
     private lateinit var propertyDetailsViewModel: PropertyDetailsViewModel
 
+    //loads initial property data. gets reference to view model
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -33,6 +36,7 @@ class PropertyListFragment : Fragment() {
         propertyDetailsViewModel = ViewModelProvider(context).get(PropertyDetailsViewModel::class.java)
     }
 
+    //loads recycler view and components
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -42,8 +46,8 @@ class PropertyListFragment : Fragment() {
         val recyclerView = inflater.inflate(R.layout.fragment_list, container, false) as RecyclerView
         recyclerView.layoutManager = LinearLayoutManager(context)
 
-        var editedProperty = propertyDetailsViewModel.editedProperty.value
-
+        //updated list from editedproperty live data model in view model
+        val editedProperty = propertyDetailsViewModel.editedProperty.value
         if (editedProperty != null) {
             for (i in 0 until (propertyArray.size-1)){
                 if (propertyArray[i].id ==editedProperty.id){
@@ -52,7 +56,7 @@ class PropertyListFragment : Fragment() {
                 }
             }
         }
-
+        //assigns loaded adaptor
         recyclerView.adapter = PropertyAdapter(propertyArray)
         return recyclerView
     }
