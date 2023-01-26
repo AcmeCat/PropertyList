@@ -1,2 +1,2 @@
 # PropertyList
-App
+A simple native Adroid app using Kotlin
